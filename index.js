@@ -1,7 +1,5 @@
-/*****************************|
-| Bot developed by MrSeppukun |
-| V1.3                        |
-|*****************************/
+// Bot Developed by Alex Eyerly
+// Eegbot Discord Bot
 
 //Imports
 const Discord = require('discord.js');
@@ -61,7 +59,7 @@ async function midnightJob() {
             newBuyPrice = 10;
             newSellPrice = 5;
         }
-        //console.log(newBuyPrice);
+        
         ItemShop.update({yesterdayBuys: item.todayBuys}, {where: {itemName: item.itemName}});
         ItemShop.update({yesterdaySells: item.todaySells}, {where: {itemName: item.itemName}});
         ItemShop.update({todayBuys: 0}, {where: {itemName: item.itemName}});
@@ -74,10 +72,9 @@ async function midnightJob() {
     ItemShop.update({bonusItem: 1}, {where: {itemId: newPopularItem}})
 
     popularName = await ItemShop.findOne({where: {itemId: newPopularItem}});
-    //client.channels.cache.get('757679230703108170').send(`Prices have been updated! The new popular item for the day is ${popularName}`);
 }
 
-//Constantyly keep database synced
+//Constantly keep database synced
 async function dbSync() {
     const storedBalances = await Users.findAll();
     storedBalances.forEach(b => currency.set(b.user_id, b));
@@ -254,18 +251,6 @@ client.on('message', async message => {
         }
     }
 
-    //Word corrections
-    const correctionList = ['egg', 'Egg', 'eGg', 'egG', 'EGg', 'eGG', 'EgG', 'EGG', 'e g g', 'E g g', 'E G G'];
-
-    if (!message.content.startsWith(prefix) && !message.author.bot) {
-        correctionList.forEach(correction => {
-            if(message.content.includes(correction)) {
-                message.reply('Eww. Eegs only please.');
-            }
-
-        })
-    }
-
     if (message.content.startsWith(prefix)) {
         //Formatting command
         const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -274,12 +259,6 @@ client.on('message', async message => {
         if (!client.commands.has(commandName)) return;
 
         const command = client.commands.get(commandName);
-
-        if ((message.author.tag === 'wickeditch#6576' || message.author.tag === 'MrSethreekun#7408') && commandName != 'anon') {
-            if (message.channel.type === 'dm') {
-                return message.channel.send('Stop using the bot in dms you nerd!');
-            }
-        }
         
         //User did not provide arguments when command requires arguments
         if (command.args && !args.length) {
